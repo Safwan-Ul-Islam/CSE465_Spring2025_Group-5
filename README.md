@@ -7,7 +7,7 @@ This project aims to predict fetal growth throughout pregnancy using ultrasound 
 
 ## Contributions
 
-I am alone in this group so no contribution of groupmaets
+I am alone in this group .
 
 ## Data Augmentation Methods
 

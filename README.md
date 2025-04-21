@@ -5,9 +5,9 @@ This project aims to predict fetal growth throughout pregnancy using ultrasound 
 
 # **Fetal Growth Throughout Pregnancy Using Ultrasound Images**
 
-##GROUP INFO
+## Contributions
 
-I am alone in this group so no contribution of groupmaets
+I am alone in this group .
 
 ## Data Augmentation Methods
 
@@ -24,7 +24,7 @@ To improve model performance and prevent overfitting, I applied several data aug
 
 I trained the dataset using the **UNet model** and evaluated its performance using **Dice coefficient** and **Intersection over Union (IoU)** scores. However, the model performed poorly on the test set, failing to predict meaningful masks. To improve this, I plan to implement a **5-fold cross-validation** approach for better generalization. Below is the validation result so far:  
 
-![Validation Results](path-to-validation-image.png)  
+![Validation Results](validation_results.png)  
 
 ## Final Plan 
 

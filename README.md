@@ -18,13 +18,17 @@ To improve model performance and prevent overfitting, I applied several data aug
 - **Zooming**: Random zooming to account for various levels of proximity.  
 - **Translation**: Shifting images along both axes to simulate positional variations of the fetus.  
 - **Brightness Adjustment**: Random brightness changes to help the model generalize across different exposure levels.  
-- **Noise Injection**: Adding random noise to enhance robustness against noisy data.  
+- **Noise Injection**: Adding random noise to enhance robustness against noisy data.
+
+# Network architecture 
+
 
 # Model Training & Validation  
 
 
 ## Head Circumference Prediction with HRNet
 
+![model](HRNET arc.png)  
 
 ## Model Architecture
 **HRNet (High-Resolution Network)**  

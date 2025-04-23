@@ -20,12 +20,12 @@ from tabulate import tabulate
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_PATH = os.path.join(BASE_DIR, 'best_model.h5')
 TEST_IMAGE_DIR = os.path.join(BASE_DIR, 'dataset/test_dataset/images')
-TEST_MASK_DIR = os.path.join(BASE_DIR, 'dataset/test_dataset/masks')  # If needed
+TEST_MASK_DIR = os.path.join(BASE_DIR, 'dataset/test_dataset/masks')
 CSV_PATH = os.path.join(BASE_DIR, 'dataset/pixel_size_and_HC.csv')
 OUTPUT_DIR = os.path.join(BASE_DIR, 'results')
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-# Custom metrics (same as your original)
+# Custom metrics
 def dice_coef(y_true, y_pred, smooth=1):
     y_true_f = tf.keras.backend.flatten(y_true)
     y_pred_f = tf.keras.backend.flatten(y_pred)
@@ -101,7 +101,7 @@ def main():
             # Process image
             img_path = os.path.join(TEST_IMAGE_DIR, filename)
             img = process_image(img_path)
-            img_batch = np.expand_dims(img, axis=0)  # Add batch dimension
+            img_batch = np.expand_dims(img, axis=0)
 
             # Predict
             pred_mask = model.predict(img_batch, verbose=0)[0]

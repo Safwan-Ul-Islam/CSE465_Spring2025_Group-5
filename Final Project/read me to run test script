@@ -1,0 +1,35 @@
+# Fetal Head Circumference Measurement - Group 5
+
+This repository contains the code and model for predicting fetal head circumference from ultrasound images.
+
+## Repository Structure
+CSE465_Spring2025_Group-5/
+├── Final Project/
+│   ├── best_model.h5
+│   ├── test_script.py          # Main test script
+│   ├── requirements.txt        # Python dependencies
+│   └── dataset/
+│       ├── test_dataset/
+│       │   ├── images/         # Test images
+│       │   └── masks/          # Ground truth masks (if needed)
+│       └── pixel_size_and_HC.csv
+├── README.md
+└── .gitignore
+
+
+
+## Setup
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Safwan-Ul-Islam/CSE465_Spring2025_Group-5.git
+   cd CSE465_Spring2025_Group-5/Final\ Project
+
+2. Install the dependencies if required
+
+pip install -r requirements.txt
+
+
+3.run the test script
+
+python test_scriptt.py

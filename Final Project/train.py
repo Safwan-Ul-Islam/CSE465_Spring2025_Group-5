@@ -15,8 +15,8 @@ from google.colab import drive
 # Mount Google Drive
 drive.mount('/content/drive')
 
-# Define paths (MODIFY THESE TO MATCH YOUR ACTUAL FILE PATHS)
-drive_root = '/content/drive/MyDrive/'  # Adjust if your files are in a subfolder
+
+drive_root = '/content/drive/MyDrive/'
 train_zip_path = os.path.join(drive_root, 'training_set.zip')
 train_csv_path = os.path.join(drive_root, 'training_set_pixel_size_and_HC.csv')
 
@@ -109,15 +109,15 @@ import cv2
 import os
 from glob import glob
 
-# Set paths (modify if needed)
+
 train_images_dir = '/content/data/train/images'
 train_masks_dir = '/content/data/train/masks'
 
-# Get sample images and masks
+
 image_files = sorted(glob(os.path.join(train_images_dir, '*.png')))
 mask_files = sorted(glob(os.path.join(train_masks_dir, '*_Annotation.png')))
 
-# Verify we have matching pairs
+
 if len(image_files) == 0 or len(mask_files) == 0:
     print("No images or masks found! Check your paths:")
     print(f"Images path: {train_images_dir}")
@@ -125,10 +125,10 @@ if len(image_files) == 0 or len(mask_files) == 0:
 else:
     print(f"Found {len(image_files)} images and {len(mask_files)} masks")
 
-# Display function
+
 def display_image_with_mask(image_path, mask_path, alpha=0.4):
     """Display image with mask overlay"""
-    # Read images
+
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
 
@@ -140,10 +140,10 @@ def display_image_with_mask(image_path, mask_path, alpha=0.4):
     colored_mask = np.zeros((*mask.shape, 3), dtype=np.uint8)
     colored_mask[mask > 0] = [255, 0, 0]  # Red color
 
-    # Convert grayscale image to RGB for visualization
+
     image_rgb = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
 
-    # Overlay mask
+
     overlayed = cv2.addWeighted(image_rgb, 1, colored_mask, alpha, 0)
 
     # Create figure
@@ -184,14 +184,14 @@ import albumentations as A
 from sklearn.model_selection import train_test_split
 from collections import defaultdict
 import matplotlib.pyplot as plt
-from glob import glob # Import glob to find files
+from glob import glob
 
-# Configuration for 256x256 images
+
 class Config:
     TARGET_SIZE = (256, 256)
     INPUT_IMAGES_DIR = '/content/data/train/images'
     INPUT_MASKS_DIR = '/content/data/train/masks'
-    OUTPUT_DIR = '/content/data/split_preprocessed_256'  # This is likely already correct
+    OUTPUT_DIR = '/content/data/split_preprocessed_256'
 
     AUGMENT = True
     NUM_AUGMENTATIONS = 5
@@ -199,7 +199,7 @@ class Config:
     VAL_SIZE = 0.2
     RANDOM_STATE = 42
 
-# Create output directories
+
 for subset in ['train', 'val', 'test']:
     for data_type in ['images', 'masks']:
         os.makedirs(os.path.join(Config.OUTPUT_DIR, subset, data_type), exist_ok=True)
@@ -212,19 +212,19 @@ class DataPreprocessor:
     def _create_augmentation_pipeline(self):
         """Create augmentation pipeline with foreground preservation"""
         return A.Compose([
-            # Geometric transformations (adjusted limits for smaller images)
+
             A.HorizontalFlip(p=0.5),
             A.VerticalFlip(p=0.5),
-            A.Rotate(limit=30, p=0.5, interpolation=cv2.INTER_NEAREST),  # Reduced rotation limit
+            A.Rotate(limit=30, p=0.5, interpolation=cv2.INTER_NEAREST),
             A.ShiftScaleRotate(
-                shift_limit=0.05,  # Smaller shifts for 256x256 images
-                scale_limit=0.1,  # Slightly smaller scaling for smaller images
-                rotate_limit=20,  # Reduced rotation for smaller images
+                shift_limit=0.05,
+                scale_limit=0.1,
+                rotate_limit=20,
                 p=0.5,
                 interpolation=cv2.INTER_NEAREST
             ),
 
-            # Intensity transformations (same as before)
+
             A.RandomBrightnessContrast(
                 brightness_limit=0.1,
                 contrast_limit=0.1,
@@ -233,32 +233,31 @@ class DataPreprocessor:
             A.CLAHE(clip_limit=3.0, p=0.3),
             A.GaussNoise(var_limit=5.0, p=0.1),
 
-            # Foreground-specific augmentations (adjusted for smaller images)
+
             A.OneOf([
                 A.ElasticTransform(
-                    alpha=0.3,  # Reduced deformation
-                    sigma=15,   # Smaller sigma
-                    alpha_affine=8,  # Smaller affine
+                    alpha=0.3,
+                    sigma=15,
+                    alpha_affine=8,
                     p=0.2,
                     interpolation=cv2.INTER_NEAREST
                 ),
                 A.GridDistortion(
-                    num_steps=2,  # Fewer steps
-                    distort_limit=0.08,  # Smaller distortion
+                    num_steps=2,
+                    distort_limit=0.08,
                     p=0.2,
                     interpolation=cv2.INTER_NEAREST
                 ),
             ], p=0.3),
         ], additional_targets={'mask': 'mask'})
 
-    # All other methods remain the same except for _enhance_foreground adjustments
     def _enhance_foreground(self, image, mask):
         """Apply techniques to enhance visibility of rare foreground - adjusted for 256x256"""
         if np.mean(mask) < 0.01:
             fg_pixels = image[mask > 0]
-            if len(fg_pixels) > 5:  # Smaller threshold for smaller images
+            if len(fg_pixels) > 5:
                 p2, p98 = np.percentile(fg_pixels, (2, 98))
-                if p98 - p2 > 3:  # Smaller contrast range
+                if p98 - p2 > 3:
                     image = exposure.rescale_intensity(
                         image,
                         in_range=(p2, p98),
@@ -274,7 +273,7 @@ class DataPreprocessor:
                 kernel = np.array([[-1,-1,-1], [-1,10,-1], [-1,-1,-1]]) / 10.0
                 fg_regions = cv2.bitwise_and(image, image, mask=mask.astype(np.uint8))
                 sharpened = cv2.filter2D(fg_regions, -1, kernel)
-                image = cv2.addWeighted(image, 0.85, sharpened, 0.15, 0)  # More conservative mixing
+                image = cv2.addWeighted(image, 0.85, sharpened, 0.15, 0)
                 image = np.clip(image, 0, 255)
 
         return image, mask
@@ -284,7 +283,6 @@ class DataPreprocessor:
         image_files = sorted(glob(os.path.join(Config.INPUT_IMAGES_DIR, '*.png')))
         mask_files = sorted(glob(os.path.join(Config.INPUT_MASKS_DIR, '*.png')))
 
-        # Assuming image and mask files have a 1-to-1 correspondence based on sorting
         data_pairs = list(zip(image_files, mask_files))
 
         # Split into train, validation, and test sets
@@ -309,16 +307,16 @@ class DataPreprocessor:
             # Enhance foreground (if enabled)
             image, mask = self._enhance_foreground(image, mask)
 
-            # Data augmentation (if enabled)
+
             if Config.AUGMENT and subset == 'train':
-                for i in range(Config.NUM_AUGMENTATIONS): # Define i in loop for _save_image_mask_pair
+                for i in range(Config.NUM_AUGMENTATIONS):
                     augmented = self.augmentation_pipeline(image=image, mask=mask)
-                    self._save_image_mask_pair(augmented['image'], augmented['mask'], subset, image_path, mask_path, is_augmented=True) # Pass image_path and mask_path to _save_image_mask_pair
+                    self._save_image_mask_pair(augmented['image'], augmented['mask'], subset, image_path, mask_path, is_augmented=True)
 
-            # Save original (and augmented if applicable) image and mask
-            self._save_image_mask_pair(image, mask, subset, image_path, mask_path) # Pass image_path and mask_path to _save_image_mask_pair
 
-    def _save_image_mask_pair(self, image, mask, subset, image_path, mask_path, is_augmented=False): # Added image_path and mask_path as arguments
+            self._save_image_mask_pair(image, mask, subset, image_path, mask_path)
+
+    def _save_image_mask_pair(self, image, mask, subset, image_path, mask_path, is_augmented=False):
         """Save image and mask to the appropriate directory."""
         filename_base = os.path.splitext(os.path.basename(image_path))[0]
         if is_augmented:
@@ -331,7 +329,6 @@ class DataPreprocessor:
         cv2.imwrite(mask_output_path, mask)
 
 
-    # All other methods remain identical (they'll automatically use the new TARGET_SIZE)
 
 # Run the preprocessing pipeline
 if __name__ == "__main__":
@@ -597,7 +594,7 @@ drive.mount('/content/drive')
 
 # 2. Function to save best model to Drive - MODIFIED FOR SINGLE MODEL
 def save_best_model_to_drive(local_results_dir='/content/results', drive_dir='/content/drive/MyDrive/HRNet_Models'):
-    # Create directory in Drive if it doesn't exist
+
     os.makedirs(drive_dir, exist_ok=True)
 
     # Check for the single model and history file
@@ -748,7 +745,7 @@ def visualize_predictions(model, test_images_dir, test_masks_dir, num_samples=5,
 
     plt.show()
 
-# Usage example (add this after training in your main script):
+# Usage example
 if __name__ == "__main__":
     # Load your trained model
     model = load_model('/content/results/best_model.h5', custom_objects={
@@ -767,7 +764,7 @@ if __name__ == "__main__":
         test_images_dir=test_images_dir,
         test_masks_dir=test_masks_dir,
         num_samples=5,
-        output_dir='/content/results'  # Optional: save visualizations
+        output_dir='/content/results'
     )
 
     # Optional: Save to Google Drive

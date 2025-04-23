@@ -21,7 +21,7 @@ To improve model performance and prevent overfitting, I applied several data aug
 - **Noise Injection**: Adding random noise to enhance robustness against noisy data.
 
 # Network architecture 
-![Prediction Visualization](arc.png)  
+![Prediction Visualization](h.png)  
 
 
 # Model Training & Validation  

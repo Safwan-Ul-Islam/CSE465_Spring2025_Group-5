@@ -22,7 +22,7 @@ To improve model performance and prevent overfitting, I applied several data aug
 
 ## Model Training & Validation  
 
-I trained the dataset using the **UNet model** and evaluated its performance using **Dice coefficient** and **Intersection over Union (IoU)** scores. However, the model performed poorly on the test set, failing to predict meaningful masks. To improve this, I plan to implement a **5-fold cross-validation** approach for better generalization. Below is the validation result so far:  
+
 # Head Circumference Prediction with HRNet
 
 <<<<<<< HEAD
@@ -62,16 +62,10 @@ I trained the dataset using the **UNet model** and evaluated its performance usi
 ![Prediction Visualization](mask.png)
 
 
-*(Left: Original image, Right: Predicted mask with HC measurement)*
 
----
 
-## How to Reproduce
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/yourusername/hc-prediction.git
-   cd hc-prediction
->>>>>>> 11a6c2f1ce16727af92db9822a4b9a7f9d2360b2
-![Validation Results](train.png)  
+
+
+
 
   

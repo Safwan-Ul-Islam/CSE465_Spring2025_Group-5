@@ -28,7 +28,7 @@ To improve model performance and prevent overfitting, I applied several data aug
 
 ## Head Circumference Prediction with HRNet
 
-![model](HRNET arc.png)  
+![model](HRNET_arc.png)  
 
 ## Model Architecture
 **HRNet (High-Resolution Network)**  

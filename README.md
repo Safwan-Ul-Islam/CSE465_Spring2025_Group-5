@@ -20,13 +20,12 @@ To improve model performance and prevent overfitting, I applied several data aug
 - **Brightness Adjustment**: Random brightness changes to help the model generalize across different exposure levels.  
 - **Noise Injection**: Adding random noise to enhance robustness against noisy data.  
 
-#Model Training & Validation  
+# Model Training & Validation  
 
 
 ## Head Circumference Prediction with HRNet
 
 
-=======
 ## Model Architecture
 **HRNet (High-Resolution Network)**  
 - Input shape: (256, 256, 1)  

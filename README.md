@@ -21,7 +21,7 @@ To improve model performance and prevent overfitting, I applied several data aug
 - **Noise Injection**: Adding random noise to enhance robustness against noisy data.
 
 # Network architecture 
-![model](HRNET_arc.png)  
+![model]([HRNET_arc.png](https://github.com/Safwan-Ul-Islam/CSE465_Spring2025_Group-5/commit/1f4e0accf670b2a1a4d2633de9d9237903871fe0))  
 
 
 # Model Training & Validation  

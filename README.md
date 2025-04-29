@@ -3,7 +3,8 @@ This project aims to predict fetal growth throughout pregnancy using ultrasound 
 
 
 
-# **Fetal Growth Throughout Pregnancy Using Ultrasound Images**
+# **AI-Enhanced Pregnancy Monitoring: Advanced
+Ultrasound Imaging for Fetal Health**
 
 ## Contributions
 
